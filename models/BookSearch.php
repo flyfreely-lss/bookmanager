@@ -46,7 +46,7 @@ class BookSearch extends Book
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query->all(),
+            'query' => $query,
             'pagination' => [
                 'pageSize' => 8,
             ],

@@ -14,6 +14,9 @@ use yii\filters\VerbFilter;
  */
 class BookController extends Controller
 {
+    //取消csrf验证
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -40,9 +43,7 @@ class BookController extends Controller
 
         yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        return array(
-            'dataProvider' => $dataProvider
-        );
+        return $dataProvider->getModels();
         // return $this->render('index', [
         //     'searchModel' => $searchModel,
         //     'dataProvider' => $dataProvider,
@@ -69,15 +70,24 @@ class BookController extends Controller
      */
     public function actionCreate()
     {
+        $result = array("code"=>0,"message"=>"");
         $model = new Book();
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $result["message"] = "success";
+            // return $this->redirect(['view', 'id' => $model->id]);
+        }else{
+            $result["code"] = 1;
+            $result["message"] = "fail";
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $result;
+
+        // return $this->render('create', [
+        //     'model' => $model,
+        // ]);
     }
 
     /**
