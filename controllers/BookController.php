@@ -119,9 +119,18 @@ class BookController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $result = array("code"=>0,"message"=>"");
+        $count = $this->findModel($id)->delete();
+        if($count > 0) {
+            $result["message"] = "success";
+        }else{
+            $result["code"] = 1;
+            $result["message"] = "fail";
+        }
 
-        return $this->redirect(['index']);
+        yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $result;
+        // return $this->redirect(['index']);
     }
 
     /**
